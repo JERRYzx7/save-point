@@ -1,0 +1,36 @@
+# SAVE POINT 存檔點 — Jekyll 設定（規則見 CLAUDE.md）
+title: "SAVE POINT 存檔點"
+description: "我玩過的主機與電腦遊戲紀錄"
+lang: zh-Hant
+
+# GitHub Pages 路徑：https://jerryzx7.github.io/save-point/
+url: "https://jerryzx7.github.io"
+baseurl: "/save-point"
+
+markdown: kramdown
+kramdown:
+  parse_block_html: false
+
+collections:
+  games:
+    output: true
+    permalink: /games/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: games
+    values:
+      layout: game
+
+# 平台與狀態的固定順序（統計頁、篩選按鈕使用）
+platforms: [PS5, PS4, PC, Switch, Xbox]
+statuses: [遊玩中, 已破關, 全成就, 棄坑]
+
+exclude:
+  - CLAUDE.md
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle

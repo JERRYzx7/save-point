@@ -1,0 +1,82 @@
+---
+layout: default
+title: 統計
+permalink: /stats/
+---
+{%- comment -%} 所有數字都從 site.games 即時計算，不可寫死（CLAUDE.md 第 8 節） {%- endcomment -%}
+{%- assign games = site.games -%}
+{%- assign total = games.size -%}
+{%- assign total_hours = 0 -%}
+{%- assign rating_sum = 0.0 -%}
+{%- assign rated = 0 -%}
+{%- for g in games -%}
+  {%- assign total_hours = total_hours | plus: g.hours -%}
+  {%- if g.rating != nil -%}
+    {%- assign rating_sum = rating_sum | plus: g.rating -%}
+    {%- assign rated = rated | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<section class="container page-head">
+  <p class="eyebrow">STATS</p>
+  <h1>統計</h1>
+</section>
+
+<section class="container">
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-label">遊戲數</span><span class="kpi-value">{{ total }}</span></div>
+    <div class="kpi"><span class="kpi-label">總遊玩時數</span><span class="kpi-value">{{ total_hours | round: 1 }}<small>h</small></span></div>
+    <div class="kpi">
+      <span class="kpi-label">平均評分</span>
+      <span class="kpi-value rating">{% if rated > 0 %}{{ rating_sum | divided_by: rated | round: 1 }}<small>/10</small>{% else %}—{% endif %}</span>
+      <span class="kpi-note">共 {{ rated }} 款有評分</span>
+    </div>
+  </div>
+
+  <div class="stat-columns">
+    <section class="stat-block">
+      <h2>各平台</h2>
+      <ul class="bar-list">
+        {%- for p in site.platforms -%}
+          {%- assign n = games | where: "platform", p | size -%}
+          {%- if total > 0 -%}{%- assign pct = n | times: 100 | divided_by: total -%}{%- else -%}{%- assign pct = 0 -%}{%- endif %}
+        <li>
+          <span class="bar-label">{{ p }}</span>
+          <span class="bar"><span style="width: {{ pct }}%"></span></span>
+          <span class="bar-value num">{{ n }}</span>
+        </li>
+        {%- endfor %}
+      </ul>
+    </section>
+
+    <section class="stat-block">
+      <h2>各狀態</h2>
+      <ul class="bar-list">
+        {%- for s in site.statuses -%}
+          {%- assign n = games | where: "status", s | size -%}
+          {%- if total > 0 -%}{%- assign pct = n | times: 100 | divided_by: total -%}{%- else -%}{%- assign pct = 0 -%}{%- endif %}
+        <li>
+          <span class="bar-label">{% include status-badge.html status=s %}</span>
+          <span class="bar"><span style="width: {{ pct }}%"></span></span>
+          <span class="bar-value num">{{ n }}</span>
+        </li>
+        {%- endfor %}
+      </ul>
+    </section>
+  </div>
+
+  {%- assign by_hours = games | sort: "hours" | reverse %}
+  {%- if total > 0 %}
+  <section class="stat-block">
+    <h2>時數排行</h2>
+    <ol class="rank-list">
+      {%- for g in by_hours limit: 5 %}
+      <li style="--game-color: {{ g.theme_color }}">
+        <a href="{{ g.url | relative_url }}">{{ g.title }}</a>
+        <span class="num">{{ g.hours }} h</span>
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+  {%- endif %}
+</section>

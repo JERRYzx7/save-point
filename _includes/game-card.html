@@ -1,0 +1,26 @@
+{%- assign g = include.game -%}
+<a class="game-card" href="{{ g.url | relative_url }}"
+   style="--game-color: {{ g.theme_color | default: '#4f8cff' }};{% if g.cover_position %} --cover-pos: {{ g.cover_position }};{% endif %}"
+   data-status="{{ g.status }}" data-platform="{{ g.platform }}">
+  <div class="cover">
+    {%- if g.cover -%}
+      {%- assign cover_src = '/assets/covers/' | append: g.cover | relative_url -%}
+      <img class="ambient" src="{{ cover_src }}" alt="" aria-hidden="true" loading="lazy">
+      <img class="cover-art" src="{{ cover_src }}" alt="{{ g.title }} 封面" loading="lazy">
+    {%- else -%}
+      <span class="ambient ambient-color" aria-hidden="true"></span>
+      <span class="cover-art cover-text"><span>{{ g.title }}</span></span>
+    {%- endif -%}
+  </div>
+  <div class="card-body">
+    <h2 class="card-title">{{ g.title }}</h2>
+    <div class="card-meta">
+      <span class="platform">{{ g.platform }}</span>
+      {% include status-badge.html status=g.status %}
+    </div>
+    <dl class="card-stats">
+      <div><dt>時數</dt><dd>{% if g.hours != nil %}{{ g.hours }}<small>h</small>{% else %}—{% endif %}</dd></div>
+      <div><dt>評分</dt><dd class="rating">{% if g.rating != nil %}{{ g.rating }}<small>/10</small>{% else %}—{% endif %}</dd></div>
+    </dl>
+  </div>
+</a>

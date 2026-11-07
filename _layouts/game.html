@@ -1,0 +1,73 @@
+---
+layout: default
+---
+{%- assign g = page -%}
+{%- if g.cover -%}{%- assign cover_src = '/assets/covers/' | append: g.cover | relative_url -%}{%- endif -%}
+<article class="game-page" style="--game-color: {{ g.theme_color | default: '#4f8cff' }};{% if g.cover_position %} --cover-pos: {{ g.cover_position }};{% endif %}">
+  <header class="game-hero">
+    <div class="hero-bg" aria-hidden="true">
+      {%- if cover_src %}<img src="{{ cover_src }}" alt="">{% endif -%}
+    </div>
+    <div class="container hero-inner">
+      <div class="hero-cover">
+        {%- if cover_src -%}
+          <img class="ambient" src="{{ cover_src }}" alt="" aria-hidden="true">
+          <img class="cover-art" src="{{ cover_src }}" alt="{{ g.title }} 封面">
+        {%- else -%}
+          <span class="ambient ambient-color" aria-hidden="true"></span>
+          <span class="cover-art cover-text"><span>{{ g.title }}</span></span>
+        {%- endif -%}
+      </div>
+      <div class="hero-info">
+        <p class="eyebrow">{{ g.platform }} · {{ g.genre }}</p>
+        <h1>{{ g.title }}</h1>
+        <p class="one-liner">「{{ g.one_liner }}」</p>
+        {% include status-badge.html status=g.status %}
+      </div>
+    </div>
+  </header>
+
+  <div class="container game-layout">
+    <aside class="info-panel" aria-label="遊戲資訊">
+      <dl>
+        <div><dt>平台</dt><dd>{{ g.platform }}</dd></div>
+        <div><dt>類型</dt><dd>{{ g.genre }}</dd></div>
+        <div><dt>遊玩時數</dt><dd class="num">{% if g.hours != nil %}{{ g.hours }} 小時{% else %}—{% endif %}{% if g.hours_note %}<small class="dd-note">{{ g.hours_note }}</small>{% endif %}</dd></div>
+        <div><dt>評分</dt><dd class="num rating">{% if g.rating != nil %}{{ g.rating }} / 10{% else %}—{% endif %}</dd></div>
+        <div class="span-2">
+          <dt>主線進度</dt>
+          <dd class="num">
+            {{ g.completion | default: 0 }}%
+            <span class="progress" role="presentation"><span style="width: {{ g.completion | default: 0 }}%"></span></span>
+          </dd>
+        </div>
+        <div><dt>開始</dt><dd class="num">{{ g.start_date | default: "—" }}</dd></div>
+        <div><dt>破關</dt><dd class="num">{{ g.finish_date | default: "—" }}</dd></div>
+      </dl>
+      {%- if g.recommend_for and g.recommend_for.size > 0 %}
+      <h2 class="panel-title">推薦給</h2>
+      <ul class="chips">{% for r in g.recommend_for %}<li>{{ r }}</li>{% endfor %}</ul>
+      {%- endif %}
+      {%- if g.tags and g.tags.size > 0 %}
+      <h2 class="panel-title">標籤</h2>
+      <ul class="chips chips-muted">{% for t in g.tags %}<li>#{{ t }}</li>{% endfor %}</ul>
+      {%- endif %}
+    </aside>
+
+    <div class="game-content prose">
+      {{ content }}
+
+      {%- if g.screenshots and g.screenshots.size > 0 %}
+      <h2>截圖</h2>
+      <div class="gallery">
+        {%- for shot in g.screenshots -%}
+          {%- assign shot_src = '/assets/screenshots/' | append: g.slug | append: '/' | append: shot | relative_url -%}
+          <a href="{{ shot_src }}"><img src="{{ shot_src }}" alt="{{ g.title }} 截圖 {{ forloop.index }}" loading="lazy"></a>
+        {%- endfor -%}
+      </div>
+      {%- endif %}
+
+      <p class="back-link"><a href="{{ '/' | relative_url }}">← 回到遊戲庫</a></p>
+    </div>
+  </div>
+</article>

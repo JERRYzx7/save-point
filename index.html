@@ -1,0 +1,37 @@
+---
+layout: default
+title: 遊戲庫
+scripts:
+  - /assets/js/filter.js
+---
+{%- comment -%} 排序：遊玩中優先，其餘依破關日期新到舊；所有數字皆從 site.games 計算 {%- endcomment -%}
+{%- assign playing = site.games | where: "status", "遊玩中" -%}
+{%- assign others = site.games | where_exp: "g", "g.status != '遊玩中'" | sort: "finish_date", "first" | reverse -%}
+{%- assign total_hours = 0 -%}
+{%- for g in site.games -%}{%- assign total_hours = total_hours | plus: g.hours -%}{%- endfor -%}
+
+<section class="container home-hero">
+  <p class="eyebrow">CONTINUE?</p>
+  <h1>我的遊戲存檔</h1>
+  <p class="muted">共 <strong class="num">{{ site.games.size }}</strong> 款遊戲 · 累計 <strong class="num">{{ total_hours | round: 1 }}</strong> 小時</p>
+</section>
+
+<section class="container">
+  <div class="filter-bar" role="toolbar" aria-label="依狀態篩選">
+    <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">全部 <span class="count">{{ site.games.size }}</span></button>
+    {%- for s in site.statuses -%}
+      {%- assign n = site.games | where: "status", s | size %}
+    <button type="button" class="filter-btn" data-filter="{{ s }}" aria-pressed="false"{% if n == 0 %} disabled{% endif %}>{{ s }} <span class="count">{{ n }}</span></button>
+    {%- endfor %}
+  </div>
+
+  {%- if site.games.size == 0 %}
+  <p class="empty">還沒有任何遊戲存檔。</p>
+  {%- else %}
+  <div class="card-grid" id="game-grid">
+    {%- for g in playing %}{% include game-card.html game=g %}{% endfor -%}
+    {%- for g in others %}{% include game-card.html game=g %}{% endfor -%}
+  </div>
+  <p class="empty" id="filter-empty" hidden>這個狀態目前沒有遊戲。</p>
+  {%- endif %}
+</section>

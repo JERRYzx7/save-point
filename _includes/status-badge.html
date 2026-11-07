@@ -1,0 +1,8 @@
+{%- case include.status -%}
+  {%- when "遊玩中" -%}{%- assign status_key = "playing" -%}
+  {%- when "已破關" -%}{%- assign status_key = "cleared" -%}
+  {%- when "全成就" -%}{%- assign status_key = "platinum" -%}
+  {%- when "棄坑" -%}{%- assign status_key = "dropped" -%}
+  {%- else -%}{%- assign status_key = "unknown" -%}
+{%- endcase -%}
+<span class="status-badge status-{{ status_key }}">{{ include.status }}</span>

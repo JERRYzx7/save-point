@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <span class="brand-icon" aria-hidden="true"></span>
+      <span class="brand-text">SAVE POINT <small>存檔點</small></span>
+    </a>
+    <nav class="site-nav" aria-label="主要導覽">
+      {% assign nav = "/|遊戲庫,/stats/|統計,/about/|關於" | split: "," %}
+      {% for item in nav %}
+        {% assign parts = item | split: "|" %}
+        <a href="{{ parts[0] | relative_url }}"{% if page.url == parts[0] %} aria-current="page"{% endif %}>{{ parts[1] }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+</header>
