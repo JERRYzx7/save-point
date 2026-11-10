@@ -9,6 +9,8 @@
 - 暗色系「遊戲主機選單」風格，封面後方有 Ambient Light（背光燈）光暈效果
 - 每款遊戲有自己的主題色（`theme_color`），用在卡片邊框、光暈和遊戲頁的標題列
 - 劇情感想一律收在可展開的防雷區塊
+- 遊戲頁有總評圓環、分項評分（劇情／玩法／畫面／音樂）、優缺點，以及嵌入的 YouTube 影片
+- 首頁 COMING SOON 區塊：還沒發售的期待作附上發售倒數和官方預告，不算進統計
 - 首頁和統計頁的數字全部從遊戲資料自動計算，不用手動更新
 - 手機版也能正常瀏覽
 
@@ -26,10 +28,11 @@
 
 ```
 _games/        每款遊戲一個 .md（_template.md 是範本）
+_wishlist/     即將推出／想玩的遊戲（首頁 COMING SOON）
 _layouts/      default.html（全站外框）、game.html（遊戲頁）
-_includes/     head、header、footer、遊戲卡片、狀態徽章
+_includes/     head、header、footer、遊戲卡片、狀態徽章、COMING SOON、YouTube 嵌入
 assets/css/    style.css
-assets/js/     filter.js
+assets/js/     filter.js（狀態篩選）、countdown.js（發售倒數）
 assets/covers/ 遊戲封面圖
 index.html     首頁（封面牆＋篩選）
 stats.html     統計頁

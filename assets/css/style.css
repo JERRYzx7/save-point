@@ -311,6 +311,88 @@ details.spoiler[open] { border-style: solid; padding-bottom: 12px; }
 
 .back-link { margin-top: 48px; }
 
+/* 評價總覽：總評圓環＋分項長條＋優缺點 */
+.review {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 8px;
+}
+.review-top { display: flex; align-items: center; gap: 32px; }
+.rating-ring {
+  --pct: 0;
+  flex: none; width: 132px; height: 132px; border-radius: 50%;
+  display: grid; place-content: center; text-align: center;
+  background:
+    radial-gradient(closest-side, var(--color-surface) 78%, transparent 80%),
+    conic-gradient(var(--game-color) calc(var(--pct) * 1%), var(--color-surface-2) 0);
+  box-shadow: 0 0 32px color-mix(in srgb, var(--game-color) 45%, transparent);
+}
+.ring-value { font-family: var(--font-display); font-weight: 700; font-size: 2.6rem; line-height: 1; }
+.ring-label { font-size: .75rem; color: var(--color-text-muted); letter-spacing: .2em; }
+
+.score-bars { list-style: none; margin: 0; padding: 0; flex: 1; display: grid; gap: 12px; }
+.score-bars li { display: grid; grid-template-columns: 3em 1fr 2.5em; align-items: center; gap: 12px; }
+.score-label { color: var(--color-text-muted); font-size: .9rem; }
+.score-bar { height: 8px; border-radius: 4px; background: var(--color-surface-2); overflow: hidden; }
+.score-bar span { display: block; height: 100%; border-radius: 4px; background: var(--game-color); box-shadow: 0 0 12px var(--game-color); }
+.score-value { text-align: right; font-weight: 700; font-size: 1.1rem; }
+
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.pros-cons > div { border-radius: 10px; padding: 14px 18px; background: var(--color-surface-2); }
+.pros-cons h3 { margin: 0 0 8px; font-size: 1rem; }
+.pros-cons ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pros-cons li { padding-left: 1.4em; position: relative; }
+.pros-cons li::before { position: absolute; left: 0; font-weight: 700; }
+.pros { border-left: 3px solid var(--status-cleared); }
+.pros h3, .pros li::before { color: var(--status-cleared); }
+.pros li::before { content: "＋"; }
+.cons { border-left: 3px solid var(--status-dropped); }
+.cons h3, .cons li::before { color: var(--status-dropped); }
+.cons li::before { content: "－"; }
+
+/* YouTube */
+.video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin: 12px 0; }
+.video { margin: 0; }
+.video-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #000; border: 1px solid var(--color-border); }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video figcaption { font-size: .82rem; color: var(--color-text-muted); margin-top: 6px; }
+
+/* ---------- 首頁 COMING SOON ---------- */
+.coming-soon { margin-bottom: 48px; }
+.soon-card {
+  position: relative;
+  background:
+    radial-gradient(600px 300px at 0% 0%, color-mix(in srgb, var(--game-color) 30%, transparent), transparent 70%),
+    var(--color-surface);
+  border: 1px solid color-mix(in srgb, var(--game-color) 50%, transparent);
+  border-radius: calc(var(--radius) + 4px);
+  padding: 28px;
+  box-shadow: 0 0 48px color-mix(in srgb, var(--game-color) 22%, transparent);
+}
+.soon-main { display: flex; gap: 32px; align-items: center; }
+.soon-cover { position: relative; isolation: isolate; flex: 0 0 180px; }
+.soon-cover .ambient { opacity: .8; }
+.soon-info { min-width: 0; }
+.soon-info h2 { margin: 0 0 6px; font-size: clamp(1.6rem, 4vw, 2.6rem); }
+.soon-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 16px; }
+.countdown { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.countdown > div {
+  min-width: 72px; padding: 8px 12px; border-radius: 10px; text-align: center;
+  background: var(--color-bg); border: 1px solid color-mix(in srgb, var(--game-color) 45%, transparent);
+}
+.cd-num {
+  display: block; font-family: var(--font-display); font-weight: 700; font-size: 2.2rem; line-height: 1.1;
+  font-variant-numeric: tabular-nums; color: #fff;
+  text-shadow: 0 0 16px var(--game-color);
+}
+.cd-label { font-size: .75rem; color: var(--color-text-muted); }
+.cd-done { margin: 0; font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--game-color); }
+.soon-hype-label { margin: 0 0 6px; font-size: .8rem; color: var(--color-text-muted); letter-spacing: .1em; }
+.soon-source { font-size: .75rem; margin: 12px 0 0; }
+.soon-card .video-grid { margin-top: 24px; }
+
 /* ---------- 統計頁 ---------- */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
 .kpi {
@@ -344,6 +426,7 @@ details.spoiler[open] { border-style: solid; padding-bottom: 12px; }
   .game-layout { grid-template-columns: 1fr; gap: 28px; }
   .info-panel { position: static; }
   .stat-columns { grid-template-columns: 1fr; }
+  .pros-cons { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -366,6 +449,17 @@ details.spoiler[open] { border-style: solid; padding-bottom: 12px; }
   .hero-cover { flex-basis: auto; width: 150px; }
 
   .kpi-value { font-size: 2.1rem; }
+
+  .review { padding: 18px; }
+  .review-top { flex-direction: column; align-items: stretch; gap: 20px; }
+  .rating-ring { align-self: center; }
+  .soon-card { padding: 18px; }
+  .soon-main { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .soon-cover { flex-basis: auto; width: 140px; }
+  .countdown { gap: 8px; }
+  .countdown > div { min-width: 0; flex: 1; padding: 6px 4px; }
+  .cd-num { font-size: 1.6rem; }
+  .video-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

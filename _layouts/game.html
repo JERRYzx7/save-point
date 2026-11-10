@@ -55,7 +55,64 @@ layout: default
     </aside>
 
     <div class="game-content prose">
+      {%- assign has_review = false -%}
+      {%- if g.rating != nil or g.scores or g.pros or g.cons -%}{%- assign has_review = true -%}{%- endif -%}
+      {%- if has_review %}
+      <section class="review" aria-label="評價總覽">
+        <div class="review-top">
+          {%- if g.rating != nil %}
+          {%- assign pct = g.rating | times: 10 %}
+          <div class="rating-ring" style="--pct: {{ pct }}" role="img" aria-label="總評 {{ g.rating }} / 10">
+            <span class="ring-value">{{ g.rating }}</span><span class="ring-label">總評</span>
+          </div>
+          {%- endif %}
+          {%- if g.scores %}
+          {%- assign score_keys = "story:劇情,gameplay:玩法,visuals:畫面,music:音樂" | split: "," %}
+          <ul class="score-bars">
+            {%- for item in score_keys -%}
+              {%- assign kv = item | split: ":" -%}
+              {%- assign score_key = kv[0] -%}
+              {%- assign val = g.scores[score_key] -%}
+              {%- if val != nil %}
+            <li>
+              <span class="score-label">{{ kv[1] }}</span>
+              <span class="score-bar"><span style="width: {{ val | times: 10 }}%"></span></span>
+              <span class="score-value num">{{ val }}</span>
+            </li>
+              {%- endif -%}
+            {%- endfor %}
+          </ul>
+          {%- endif %}
+        </div>
+        {%- if g.pros or g.cons %}
+        <div class="pros-cons">
+          {%- if g.pros %}
+          <div class="pros"><h3>優點</h3><ul>{% for x in g.pros %}<li>{{ x }}</li>{% endfor %}</ul></div>
+          {%- endif %}
+          {%- if g.cons %}
+          <div class="cons"><h3>缺點</h3><ul>{% for x in g.cons %}<li>{{ x }}</li>{% endfor %}</ul></div>
+          {%- endif %}
+        </div>
+        {%- endif %}
+      </section>
+      {%- endif %}
+
       {{ content }}
+
+      {%- if g.videos and g.videos.size > 0 %}
+      {%- assign open_videos = g.videos | where_exp: "v", "v.spoiler != true" -%}
+      {%- assign spoiler_videos = g.videos | where: "spoiler", true %}
+      <h2>影片</h2>
+      {%- if open_videos.size > 0 %}
+      <div class="video-grid">{% for v in open_videos %}{% include youtube.html id=v.id title=v.title %}{% endfor %}</div>
+      {%- endif %}
+      {%- if spoiler_videos.size > 0 %}
+      <details class="spoiler">
+        <summary>⚠️ 劇情講解影片（有雷），點擊展開</summary>
+        <div class="video-grid">{% for v in spoiler_videos %}{% include youtube.html id=v.id title=v.title %}{% endfor %}</div>
+      </details>
+      {%- endif %}
+      {%- endif %}
 
       {%- if g.screenshots and g.screenshots.size > 0 %}
       <h2>截圖</h2>

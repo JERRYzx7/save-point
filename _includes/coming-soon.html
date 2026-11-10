@@ -1,0 +1,50 @@
+{%- comment -%} 首頁 COMING SOON：讀 _wishlist，依發售日排序；不算進任何統計 {%- endcomment -%}
+{%- assign upcoming = site.wishlist | sort: "release_date", "last" -%}
+{%- if upcoming.size > 0 %}
+<section class="container coming-soon" aria-label="即將推出">
+  <p class="eyebrow">COMING SOON</p>
+  {%- for w in upcoming %}
+  <article class="soon-card" style="--game-color: {{ w.theme_color | default: '#4f8cff' }};{% if w.cover_position %} --cover-pos: {{ w.cover_position }};{% endif %}">
+    <div class="soon-main">
+      <div class="cover soon-cover">
+        {%- if w.cover -%}
+          {%- assign cover_src = '/assets/covers/' | append: w.cover | relative_url -%}
+          <img class="ambient" src="{{ cover_src }}" alt="" aria-hidden="true">
+          <img class="cover-art" src="{{ cover_src }}" alt="{{ w.title }} 封面">
+        {%- else -%}
+          <span class="ambient ambient-color" aria-hidden="true"></span>
+          <span class="cover-art cover-text"><span>{{ w.title }}</span></span>
+        {%- endif -%}
+      </div>
+      <div class="soon-info">
+        <h2>{{ w.title }}</h2>
+        <p class="soon-meta">
+          <span class="platform">{{ w.platform }}</span>
+          {% if w.release_date %}<span class="num">{{ w.release_date | replace: "-", "/" }} 發售</span>{% else %}<span>發售日未定</span>{% endif %}
+          {% if w.release_note %}<span class="muted">· {{ w.release_note }}</span>{% endif %}
+        </p>
+        {%- if w.release_date %}
+        <div class="countdown" data-release="{{ w.release_date }}" aria-live="polite">
+          <div><span class="cd-num" data-unit="d">--</span><span class="cd-label">天</span></div>
+          <div><span class="cd-num" data-unit="h">--</span><span class="cd-label">時</span></div>
+          <div><span class="cd-num" data-unit="m">--</span><span class="cd-label">分</span></div>
+          <div><span class="cd-num" data-unit="s">--</span><span class="cd-label">秒</span></div>
+          <p class="cd-done" hidden>🎮 已發售！</p>
+        </div>
+        {%- endif %}
+        {%- if w.hype and w.hype.size > 0 %}
+        <p class="soon-hype-label">我最期待</p>
+        <ul class="chips">{% for h in w.hype %}<li>{{ h }}</li>{% endfor %}</ul>
+        {%- endif %}
+        {%- if w.release_source %}<p class="soon-source muted">發售日來源：{{ w.release_source }}</p>{% endif %}
+      </div>
+    </div>
+    {%- if w.videos and w.videos.size > 0 %}
+    <div class="video-grid">
+      {%- for v in w.videos %}{% include youtube.html id=v.id title=v.title %}{% endfor %}
+    </div>
+    {%- endif %}
+  </article>
+  {%- endfor %}
+</section>
+{%- endif %}

@@ -3,6 +3,7 @@ layout: default
 title: 遊戲庫
 scripts:
   - /assets/js/filter.js
+  - /assets/js/countdown.js
 ---
 {%- comment -%} 排序：遊玩中優先，其餘依破關日期新到舊；所有數字皆從 site.games 計算 {%- endcomment -%}
 {%- assign playing = site.games | where: "status", "遊玩中" -%}
@@ -16,7 +17,10 @@ scripts:
   <p class="muted">共 <strong class="num">{{ site.games.size }}</strong> 款遊戲 · 累計 <strong class="num">{{ total_hours | round: 1 }}</strong> 小時</p>
 </section>
 
+{% include coming-soon.html %}
+
 <section class="container">
+  <p class="eyebrow">LIBRARY</p>
   <div class="filter-bar" role="toolbar" aria-label="依狀態篩選">
     <button type="button" class="filter-btn" data-filter="all" aria-pressed="true">全部 <span class="count">{{ site.games.size }}</span></button>
     {%- for s in site.statuses -%}

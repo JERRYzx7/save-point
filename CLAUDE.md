@@ -97,22 +97,28 @@ my-game-log/
 ├── _games/                # ★ 每款遊戲一個 Markdown 檔（新增遊戲只動這裡）
 │   ├── _template.md       #   新增遊戲用的範本（底線開頭，不會被發布）
 │   └── <slug>.md
+├── _wishlist/             # ★「即將推出 / 想玩」的遊戲，一款一檔，顯示在首頁 COMING SOON 區塊，不算進統計
+│   ├── _template.md
+│   └── <slug>.md
 ├── _layouts/
 │   ├── default.html       # 全站外框：head、導覽列、footer
-│   └── game.html          # 遊戲詳細頁：標題列、資訊面板、內文、截圖
+│   └── game.html          # 遊戲詳細頁：標題列、資訊面板、評價總覽、內文、影片、截圖
 ├── _includes/
 │   ├── head.html          # <head>：meta、字體、CSS
 │   ├── header.html        # 導覽列
 │   ├── footer.html        # 頁尾
 │   ├── game-card.html     # 首頁的單張遊戲卡片
-│   └── status-badge.html  # 狀態徽章（首頁與詳細頁共用）
+│   ├── status-badge.html  # 狀態徽章（首頁與詳細頁共用）
+│   ├── coming-soon.html   # 首頁 COMING SOON 區塊（讀 site.wishlist）
+│   └── youtube.html       # YouTube 嵌入（16:9、youtube-nocookie）
 ├── assets/
 │   ├── css/style.css      # 全站唯一的樣式表（純 CSS）
 │   ├── js/filter.js       # 首頁狀態篩選（原生 JS）
+│   ├── js/countdown.js    # COMING SOON 發售倒數（原生 JS）
 │   ├── covers/            # 遊戲封面圖（使用者自行下載提供），檔名 <slug>.jpg / .png / .webp
 │   └── screenshots/
 │       └── <slug>/        # 使用者自己提供的截圖，一款遊戲一個資料夾
-├── index.html             # 首頁：遊戲卡片牆 + 狀態篩選
+├── index.html             # 首頁：COMING SOON + 遊戲卡片牆 + 狀態篩選
 ├── stats.html             # 統計頁：全部由 Liquid 從 _games 計算
 └── about.md               # 關於本站
 ```
@@ -146,7 +152,27 @@ my-game-log/
 | `tags` | 選填 | 字串陣列 | 自由標籤，中文為主；同義的標籤要統一（先看既有遊戲用過哪些） | `["開放世界", "劇情向", "Rockstar"]` |
 | `cover` | 選填 | 字串 | `assets/covers/` 下的檔名，只有使用者提供了圖檔才填；沒填就自動用文字封面 | `"gta-v.jpg"` |
 | `cover_position` | 選填 | 字串 | CSS `object-position` 值。封面是**橫式**圖時，用來指定直式卡片要裁切保留哪一塊（例：主角在右邊就用 `"80% center"`）；直式封面不用填 | `"80% center"` |
+| `scores` | 選填 | 物件 | 分項評分，四個子欄位都是 0–10 數字（可小數一位）：`story` 劇情、`gameplay` 玩法、`visuals` 畫面、`music` 音樂。缺哪項就省略哪項 | 見下方範例 |
+| `pros` | 選填 | 字串陣列 | 優點，每項一句話，來自使用者 | `["人物塑造鮮明"]` |
+| `cons` | 選填 | 字串陣列 | 缺點，每項一句話，來自使用者；使用者說「沒缺點」就不填 | `["節奏偏慢"]` |
+| `videos` | 選填 | 物件陣列 | YouTube 影片。每項：`id`（影片 ID，必填）、`title`（顯示標題，必填）、`spoiler`（`true` 會放進防雷區塊；劇情講解、結局相關一律 `true`）。規則見第 8 節第 9 條 | 見下方範例 |
 | `screenshots` | 選填 | 字串陣列 | 只有使用者提供截圖時才填；值是 `assets/screenshots/<slug>/` 下的檔名 | `["camp.jpg", "sunset.png"]` |
+
+`scores`、`videos` 的寫法：
+
+```yaml
+scores:
+  story: 8
+  gameplay: 9
+  visuals: 9
+  music: 9
+videos:
+  - id: QkkoHAzjnUs
+    title: "Grand Theft Auto V Trailer（Rockstar 官方）"
+  - id: xxxxxxxxxxx
+    title: "劇情講解（頻道名稱）"
+    spoiler: true
+```
 
 ### 欄位之間的一致性規則
 
@@ -156,6 +182,26 @@ my-game-log/
 - `status: 棄坑` → 可以不填 `finish_date`；`one_liner` 或內文中建議說明棄坑原因（問使用者）。
 - 選填欄位沒有資料時，**整行刪掉**，不要留空值（不要寫 `rating:` 或 `rating: null`）。
 - 版面上缺少的數值一律顯示 `—`，由 layout 處理，遊戲檔不用管。
+
+### 4.1 `_wishlist/`：即將推出 / 想玩的遊戲
+
+還沒玩的遊戲（例如尚未發售）放在 `_wishlist/<slug>.md`，只有 front matter、沒有內文。它們顯示在首頁最上方的 COMING SOON 區塊，**不會**出現在遊戲庫，也**不會**算進統計。
+
+| 欄位 | 必填 | 型別 | 允許值 / 格式 | 範例 |
+|---|---|---|---|---|
+| `title` | ✅ | 字串 | 遊戲正式名稱 | `"Grand Theft Auto VI"` |
+| `slug` | ✅ | 字串 | 同第 6 節命名規則，等於檔名 | `gta-vi` |
+| `platform` | ✅ | 字串 | 使用者**打算**玩的平台，允許值同 `_games` | `PS5` |
+| `release_date` | 選填 | 字串（加引號） | `"YYYY-MM-DD"`。這是客觀事實，AI 可以上網查，但必須查到**官方或多個可靠來源一致**的日期，並在 `release_source` 註明來源；查不到就不填 | `"2026-11-19"` |
+| `release_source` | 選填 | 字串 | 發售日的來源說明 | `"Rockstar 官方公告"` |
+| `release_note` | 選填 | 字串 | 補充說明 | `"PC 版日期未公布"` |
+| `theme_color` | ✅ | 字串（加引號） | 同 `_games` | `"#e0457b"` |
+| `cover` / `cover_position` | 選填 | 字串 | 同 `_games` | `"gta-vi.jpg"` |
+| `hype` | 選填 | 字串陣列 | 使用者最期待的地方，**來自使用者** | `["罪惡城回歸"]` |
+| `videos` | 選填 | 物件陣列 | 同 `_games`，通常放官方預告 | |
+
+- 有 `release_date` 的會顯示倒數；日期過了會顯示「已發售」。
+- **使用者開始玩之後**：照第 7 節 SOP 在 `_games/` 新增正式遊戲檔（問齊所有資料），然後刪掉 `_wishlist/` 裡的那個檔案。
 
 ---
 
@@ -192,7 +238,7 @@ front matter 之後的 Markdown 內文，**必須依照下面的順序**，使�
 - 「最喜歡的時刻」若部分內容有劇情雷（例如角色死亡、結局），把**沒雷的部分寫在外面**，有雷的部分放進該段自己的防雷區塊，`<summary>` 寫 `⚠️ 這段有劇情雷，點擊展開`。
 - 使用者提供的是條列式的短句時，內文就用條列呈現，不要擴寫成長篇文章；可以修正錯字、統一標點，但不可加入使用者沒說過的內容。
 - 使用者沒提供某一段的內容時：先問；使用者明確說「這段先空著」，就在該段寫 `（待補）`，不要自己寫。
-- 不要在這四段之外新增其他標題。截圖由 layout 根據 `screenshots` 欄位自動顯示，不用寫在內文。
+- 不要在這四段之外新增其他標題。評價總覽（`rating`、`scores`、`pros`、`cons`）、影片（`videos`）、截圖（`screenshots`）都由 layout 根據 front matter 自動顯示，不用寫在內文。
 
 ---
 
@@ -247,6 +293,8 @@ front matter 之後的 Markdown 內文，**必須依照下面的順序**，使�
 - [ ] 每一個數字與心得都能對應到使用者說過的話，**沒有任何捏造**。
 - [ ] 內文四個標題順序正確、文字一字不差。
 - [ ] 「劇情感想」在 `<details class="spoiler" markdown="1">` 裡；其他段落若有劇情雷也已包起來。
+- [ ] `scores` 每項 0–10；`pros`、`cons` 都是使用者說過的內容。
+- [ ] `videos` 每支都用 oEmbed 驗證過存在、使用者同意過；劇情相關的有 `spoiler: true`。
 - [ ] `cover` 有填的話，`assets/covers/` 裡確實有這個檔案（檔名、副檔名完全一致）；沒有外連任何網路圖片。
 - [ ] 沒有修改 `_layouts/`、`_includes/`、`assets/css/`、`assets/js/`、`index.html`、`stats.html`。
 - [ ] 沒有手動改任何統計數字（首頁與統計頁會自動更新）。
@@ -264,6 +312,11 @@ front matter 之後的 Markdown 內文，**必須依照下面的順序**，使�
 6. **只用 GitHub Pages 支援的東西**：不新增 GitHub Pages 白名單以外的 Jekyll plugin，不引入需要建置的前端框架（React、Vue、Tailwind 建置版、npm 套件等）。需要互動就寫原生 JS。
 7. **路徑一律用 `relative_url`**：任何站內連結、CSS、JS、圖片路徑都要經過 `| relative_url`。
 8. **規則有疑問先問**：如果這份文件沒涵蓋到的情況，先問使用者；決定後建議把新規則補進本文件。
+9. **YouTube 影片要驗證、要同意**：
+   - 只存影片 ID，用 `_includes/youtube.html` 以 `youtube-nocookie.com` 嵌入；不要貼影片縮圖圖片。
+   - AI 可以搜尋候選影片，但**每支都要先用 oEmbed 驗證存在**（`curl "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=<ID>&format=json"`，回傳的標題與頻道要合理），**不可憑記憶寫影片 ID**。
+   - 列給使用者確認後才加入。使用者自己貼的網址也一樣要驗證。
+   - 劇情講解、結局分析等影片一律 `spoiler: true`。
 
 ---
 
@@ -277,7 +330,7 @@ front matter 之後的 Markdown 內文，**必須依照下面的順序**，使�
 | **標籤頁** `/tags/` | 新增 `tags.html`，收集所有遊戲的 `tags`、`uniq` 後列出，每個標籤一個錨點區塊（`#tag-開放世界`）。**不要用 jekyll-archives**（GitHub Pages 不支援）。 |
 | **平台頁** | 同標籤頁做法，用 `where: "platform", "PS5"` 篩選。 |
 | **首頁排序 / 搜尋** | 擴充 `assets/js/filter.js`，卡片上已有 `data-*` 屬性可用。 |
-| **「想玩清單」** | 若要記錄還沒玩的遊戲，**不要**塞進 `status`；應該另開一個 collection（例如 `_wishlist/`），避免污染統計。 |
+| ~~想玩清單~~ | 已實作為 `_wishlist/`（見 4.1 節）。 |
 
 ### 擴充時的流程
 

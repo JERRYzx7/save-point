@@ -19,6 +19,17 @@ one_liner: "30 字以內的一句話心得"
 recommend_for: ["推薦對象 1", "推薦對象 2"]
 tags: ["標籤 1", "標籤 2"]
 screenshots: ["shot-1.jpg"] # 選填，檔案放 assets/screenshots/<slug>/
+scores:                  # 選填，分項評分 0-10，缺哪項就省略
+  story: 0
+  gameplay: 0
+  visuals: 0
+  music: 0
+pros: ["優點 1"]          # 選填
+cons: ["缺點 1"]          # 選填
+videos:                  # 選填，ID 必須先用 oEmbed 驗證（CLAUDE.md 第 8 節第 9 條）
+  - id: VIDEO_ID
+    title: "影片標題（頻道）"
+    spoiler: true        # 劇情相關一律 true
 ---
 
 ## 一句話心得

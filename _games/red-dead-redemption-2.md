@@ -13,6 +13,27 @@ cover_position: "82% center"
 one_liner: "我有一個永遠的朋友：亞瑟·摩根。"
 recommend_for: ["喜歡慢節奏敘事的人", "西部片迷", "想沉浸在世界裡的人", "重視劇情與角色的人", "想悠閒放鬆、探索世界的人"]
 tags: ["開放世界", "西部", "劇情向", "Rockstar"]
+scores:
+  story: 10
+  gameplay: 10
+  visuals: 10
+  music: 10
+pros:
+  - "亞瑟與配角都像活生生的人"
+  - "悲壯的史詩感劇情"
+  - "世界沉浸感：騎馬、打獵、釣魚"
+  - "營地生活與夥伴互動"
+cons:
+  - "節奏偏慢"
+  - "移動不方便，但這是為了讓玩家節奏慢下來，所以沒有超快速的移動方式"
+videos:
+  - id: eaW0tYpxyp0
+    title: "Red Dead Redemption 2: Official Trailer #3（Rockstar 官方）"
+  - id: Dw_oH5oiUSE
+    title: "Red Dead Redemption 2: Official Gameplay Video（Rockstar 官方）"
+  - id: QqvDM15koTU
+    title: "《碧血狂殺2》故事解說（究极徐瑜杰）"
+    spoiler: true
 ---
 
 ## 一句話心得
