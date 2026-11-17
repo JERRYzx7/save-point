@@ -3,9 +3,10 @@ title: "Red Dead Redemption 2"
 slug: red-dead-redemption-2
 platform: PS5
 genre: "開放世界動作冒險"
-status: 遊玩中
-hours: 50
-completion: 85
+status: 已破關
+finish_date: "2026-11"
+hours: 103
+completion: 100
 rating: 10
 theme_color: "#8b1e1e"
 cover: "red-dead-redemption-2.jpg"
